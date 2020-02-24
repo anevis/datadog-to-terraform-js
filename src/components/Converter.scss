@@ -1,0 +1,56 @@
+.dd-input {
+    label {
+        font: 400 1.1rem Roboto, sans-serif;
+        font-weight: bold;
+    }
+    img {
+        width: 1.5rem;
+        padding-left: 0.5rem;
+    }
+    padding-bottom: 1.5rem;
+}
+
+.dd-textarea {
+    width: 60%;
+    border-left: none;
+    border-right: none;
+    color: black;
+}
+
+.dd-error {
+    display: block;
+    font: 400 1rem Roboto, sans-serif;
+    font-weight: bold;
+    color: red;
+}
+
+.dd-terraform {
+    width: 60%;
+    height: 25rem;
+    background-color: #dddddd;
+    padding: 15px 10px 10px;
+    white-space: pre-wrap;
+    overflow: scroll;
+}
+
+.dd-input-terraform {
+    button#btn-copy-terraform {
+        display: block;
+        font: 400 0.9rem Roboto, sans-serif;
+        background-color: transparent;
+        padding: 5px;
+        border: 0px;
+        box-sizing: border-box;
+
+        &:hover {
+            color: cornflowerblue;
+        }
+    }
+}
+
+.dd-terraform-pretty-print-div {
+    label {
+        display: inline-block;
+        font-size: 0.8rem;
+    }
+}
