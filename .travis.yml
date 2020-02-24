@@ -1,0 +1,25 @@
+language: bash
+
+services:
+    - docker
+
+jobs:
+    include:
+        - stage: 'Tests'
+          name: 'Unit Tests'
+          cache: cov
+          script: ./ci.sh test
+        - script: ./ci.sh analyse
+          name: 'Analyse'
+        - stage: Build
+          script: ./ci.sh build
+          if: branch != master
+        - stage: Build & Deploy
+          script: ./ci.sh build
+          if: branch = master
+          deploy:
+              provider: pages
+              skip_cleanup: true
+              github_token: $GITHUB_TOKEN # Set in the settings page of your repository, as a secure variable
+              keep_history: true
+              local_dir: build/
