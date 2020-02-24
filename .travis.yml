@@ -1,0 +1,28 @@
+language: bash
+
+services:
+    - docker
+
+addons:
+    sonarcloud:
+        organization: 'anevis'
+        token:
+            secure: 'PdlWOX9ADWJD6Gz0qkYgQqz1y+2NEkoF8U/+CB6x6deG4Whh3KziV47Eb86JRtYSC1Y+hQXfVw4yy1ykpERGiAqI1dzIl9280ERp18H9FB0I15KY6ggbf0xz84/CjJFZhhPK5leK57iixe7u9PuW3/NhYzIgnt++QxwYv7pwC2xQi4wpCcZFd0VR/gtFaIZe/5ZJmOGHrFFCPeGRT6gGba0C2UQk+8KKckBjhMEPrPLpF9JrtPYcbE1KlRVs3ZB7XLNRVXryU3Qt8cLXnu979XS4+JYf/EcVyU5MBYRSIfIoQUkmTrzHebWAe5Xy5FmcCjwzKlgHHD8fzYmEXcTu6eUnv+LCh9/RrWw9enWNC1183PEr0HNnkHZ676d81KXnayqaOCGVniCeomt/LtjV+QWyO1kOFNcqUpNCUyIphPgM0o3I9hZXNQr6DjF6o9H2uF+35/khjiwUickfh9x8ZHt4UtRvvmIIZ6rP3FZGNqWMdiJgX6EXowDY6hswzqiJpb1Z5j6znoaaBW+1q8ObQ1RcuHl+PQruFxIFGFu8PkaMKlBW90kTL/+2FNkm1WIa4fF6uOezJjRKUhCFsPwAvZVtqhSwfdgGydIYF12IFqgf4uCyHVk0WEoGQyn/IMiGBYpm6lXSUxx8JoMRHpygxtUaIBSmzKvbMp8Cs8VbmYE='
+
+jobs:
+    include:
+        - stage: 'Tests'
+          name: 'Unit Tests'
+          script: ./ci.sh test
+        - script: ./ci.sh analyse
+          name: 'Analyse'
+        - stage: Build & Deploy (Master only)
+          script: ./ci.sh build
+          deploy:
+              provider: pages
+              skip_cleanup: true
+              github_token: $GITHUB_TOKEN # Set in the settings page of your repository, as a secure variable
+              keep_history: true
+              local_dir: /root/app/build/
+              on:
+                  branch: master

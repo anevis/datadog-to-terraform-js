@@ -1,0 +1,72 @@
+{
+    "name": "datadog-to-terraform-js",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@types/enzyme": "^3.10.3",
+        "@types/enzyme-adapter-react-16": "^1.0.5",
+        "@types/jest": "^24.0.18",
+        "@types/node": "^12.7.4",
+        "@types/react": "^16.9.2",
+        "@types/react-dom": "^16.9.0",
+        "enzyme": "^3.10.0",
+        "npm": "^6.14.0",
+        "react": "^16.9.0",
+        "react-copy-to-clipboard": "^5.0.1",
+        "react-dom": "^16.9.0",
+        "react-scripts": "^3.1.1",
+        "typescript": "^3.6.2"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "test-ci": "CI=true react-scripts test",
+        "eject": "react-scripts eject",
+        "lint": "eslint --fix-dry-run src/**/*.ts*",
+        "lint-fix": "eslint --fix src/**/*.ts*",
+        "format": "prettier --write 'src/**/*.ts*'",
+        "format-check": "prettier --check 'src/**/*.ts*'",
+        "analyse": "sonar-scanner -Dsonar.host.url=https://sonarcloud.io/"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@types/react-copy-to-clipboard": "^4.3.0",
+        "@typescript-eslint/eslint-plugin": "^2.21.0",
+        "@typescript-eslint/parser": "^2.21.0",
+        "enzyme-adapter-react-16": "^1.14.0",
+        "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.10.0",
+        "eslint-plugin-prettier": "^3.1.2",
+        "eslint-plugin-react": "^7.18.3",
+        "husky": "^4.2.3",
+        "node-sass": "^4.12.0",
+        "prettier": "^1.19.1",
+        "pretty-quick": "^2.0.1",
+        "sonarqube-scanner": "^2.5.0"
+    },
+    "prettier": {
+        "printWidth": 120,
+        "tabWidth": 4,
+        "singleQuote": true
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "pretty-quick --staged && yarn lint && yarn test-ci --coverage"
+        }
+    }
+}
