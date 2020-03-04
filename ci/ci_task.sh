@@ -10,7 +10,15 @@ then
     export GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 fi
 
-export BUILD_DIR="$(pwd)/build"
+if [[ -n "${TRAVIS_BUILD_DIR:-}" ]];
+then
+    export WORK_DIR="${TRAVIS_BUILD_DIR}"
+elif [[ -z "${WORK_DIR:-}" ]];
+then
+    export WORK_DIR=$(pwd)
+fi
+
+export BUILD_DIR="${WORK_DIR}/build"
 
 echo "Travis Branch=${TRAVIS_BRANCH}"
 echo "Git Branch=${GIT_BRANCH}"
