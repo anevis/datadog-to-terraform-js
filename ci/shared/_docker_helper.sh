@@ -17,6 +17,7 @@ function run_in_docker() {
     fi
 
     echo "CI Task=${CI_TASK}"
-    docker run -e GIT_BRANCH="${GIT_BRANCH}" -e SONARCLOUD_TOKEN="${SONARCLOUD_TOKEN}" -v "${BUILD_DIR}":/root/app/build
+    docker run -e GIT_BRANCH="${GIT_BRANCH}" -e SONARCLOUD_TOKEN="${SONARCLOUD_TOKEN}" \
+        -v "${BUILD_DIR}":/root/app/build -v "${WORK_DIR}/.git":/root/app/.git \
         "${BUILD_DOCKER_IMAGE_NAME}" "./ci/indocker/_${CI_TASK}.sh"
 }
