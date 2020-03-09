@@ -32,7 +32,7 @@ class GroupBy extends BaseComponent {
 
 export class LogQuery {
     public readonly index: string;
-    public readonly compute: TFObject;
+    public readonly compute: TFObject[];
 
     public readonly search: TFObject | undefined;
     public readonly groupBy: GroupBy[];
@@ -43,10 +43,19 @@ export class LogQuery {
         this.ddJson = ddJson;
 
         this.index = ddJson.index;
-        this.compute = new TFObject('compute', ddJson.compute, true);
+        this.compute = this.initCompute();
 
         this.search = this.initSearch();
         this.groupBy = this.initGroupBy();
+    }
+
+    private initCompute(): TFObject[] {
+        if (this.ddJson.multi_compute) {
+            return this.ddJson.multi_compute.map((compute: any) => {
+                return new TFObject('compute', compute);
+            });
+        }
+        return [new TFObject('compute', this.ddJson.compute)];
     }
 
     private initSearch(): TFObject | undefined {
@@ -66,8 +75,13 @@ export class LogQuery {
     }
 
     public toTerraform(): string {
+        const computeStr = this.compute
+            .map((compute: TFObject) => {
+                return compute.toTerraform();
+            })
+            .join(' ');
         return (
-            `log_query {index = "${this.index}" ${this.compute.toTerraform()}` +
+            `log_query {index = "${this.index}" ${computeStr}` +
             `${this.searchToTerraform()}${this.groupByToTerraform()}}`
         );
     }

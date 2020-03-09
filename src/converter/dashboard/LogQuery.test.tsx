@@ -25,7 +25,32 @@ describe('Import LogQuery from JSON.', () => {
 
         const logQuery = new LogQuery(ddJson);
 
-        expect(logQuery.compute).toBeDefined();
+        expect(logQuery.compute.length).toBe(1);
+        expect(logQuery.compute[0].options).toEqual({
+            aggregation: 'max',
+            facet: '@response_time'
+        });
+    });
+
+    it('Check that LogQuery multi_compute can be imported from the JSON.', () => {
+        const ddJson = {
+            index: 'main',
+            multi_compute: [
+                {
+                    aggregation: 'max',
+                    facet: '@response_time'
+                },
+                { aggregation: 'count' }
+            ]
+        };
+
+        const logQuery = new LogQuery(ddJson);
+
+        expect(logQuery.compute.length).toBe(2);
+        expect(logQuery.compute[0].options).toEqual({
+            aggregation: 'max',
+            facet: '@response_time'
+        });
     });
 
     it('Check that LogQuery search and group_by are empty when not in JSON.', () => {
@@ -115,7 +140,27 @@ describe('Construct LogQuery terraform.', () => {
 
         const terraformStr = request.toTerraform();
 
-        expect(terraformStr).toBe('log_query {index = "main" compute = {aggregation = "max"}}');
+        expect(terraformStr).toBe('log_query {index = "main" compute {aggregation = "max"}}');
+    });
+
+    it('Construct LogQuery terraform for multi_compute.', () => {
+        const ddJson = {
+            index: 'main',
+            multi_compute: [
+                {
+                    aggregation: 'max',
+                    facet: '@response_time'
+                },
+                { aggregation: 'count' }
+            ]
+        };
+        const request = new LogQuery(ddJson);
+
+        const terraformStr = request.toTerraform();
+
+        expect(terraformStr).toBe(
+            'log_query {index = "main" compute {aggregation = "max" facet = "@response_time"} compute {aggregation = "count"}}'
+        );
     });
 
     it('Construct LogQuery terraform for search.', () => {
@@ -133,7 +178,7 @@ describe('Construct LogQuery terraform.', () => {
         const terraformStr = request.toTerraform();
 
         expect(terraformStr).toBe(
-            'log_query {index = "main" compute = {aggregation = "max"} search = {query = "my search query"}}'
+            'log_query {index = "main" compute {aggregation = "max"} search = {query = "my search query"}}'
         );
     });
 
@@ -154,7 +199,7 @@ describe('Construct LogQuery terraform.', () => {
         const terraformStr = request.toTerraform();
 
         expect(terraformStr).toBe(
-            'log_query {index = "main" compute = {aggregation = "max"} group_by {facet = "@path"}}'
+            'log_query {index = "main" compute {aggregation = "max"} group_by {facet = "@path"}}'
         );
     });
 
@@ -178,7 +223,7 @@ describe('Construct LogQuery terraform.', () => {
         const terraformStr = request.toTerraform();
 
         expect(terraformStr).toBe(
-            'log_query {index = "main" compute = {aggregation = "max"} group_by {facet = "@path" sort = {aggregation = "max"}}}'
+            'log_query {index = "main" compute {aggregation = "max"} group_by {facet = "@path" sort = {aggregation = "max"}}}'
         );
     });
 });
