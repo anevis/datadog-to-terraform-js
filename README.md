@@ -30,6 +30,12 @@ The following tools and pre-requisites must be available on the machine being us
 
 See [package.json](package.json) for all runtime and dev dependencies
 
+## Known Issues
+
+### Log Query multi-compute
+
+Terraform Datadog provider version 2.7.0 dos not seem to support multi_compute in log_query
+
 ## Licence
 
 Apache License Version 2.0, January 2004 (See the included [Licence](LICENSE) file for more information).

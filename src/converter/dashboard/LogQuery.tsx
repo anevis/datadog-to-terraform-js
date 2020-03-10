@@ -32,7 +32,7 @@ class GroupBy extends BaseComponent {
 
 export class LogQuery {
     public readonly index: string;
-    public readonly compute: TFObject[];
+    public readonly compute: TFObject;
 
     public readonly search: TFObject | undefined;
     public readonly groupBy: GroupBy[];
@@ -49,13 +49,11 @@ export class LogQuery {
         this.groupBy = this.initGroupBy();
     }
 
-    private initCompute(): TFObject[] {
+    private initCompute(): TFObject {
         if (this.ddJson.multi_compute) {
-            return this.ddJson.multi_compute.map((compute: any) => {
-                return new TFObject('compute', compute);
-            });
+            throw new Error('multi_compute is currently not supported by the Datadog Terraform provider (v2.7.0).');
         }
-        return [new TFObject('compute', this.ddJson.compute)];
+        return new TFObject('compute', this.ddJson.compute, true);
     }
 
     private initSearch(): TFObject | undefined {
@@ -75,13 +73,8 @@ export class LogQuery {
     }
 
     public toTerraform(): string {
-        const computeStr = this.compute
-            .map((compute: TFObject) => {
-                return compute.toTerraform();
-            })
-            .join(' ');
         return (
-            `log_query {index = "${this.index}" ${computeStr}` +
+            `log_query {index = "${this.index}" ${this.compute.toTerraform()}` +
             `${this.searchToTerraform()}${this.groupByToTerraform()}}`
         );
     }

@@ -5,22 +5,18 @@
     "homepage": "./",
     "dependencies": {
         "@material-ui/core": "^4.9.5",
-        "@types/enzyme": "^3.10.3",
-        "@types/enzyme-adapter-react-16": "^1.0.5",
-        "@types/jest": "^24.0.18",
         "@types/node": "^12.7.4",
         "@types/react": "^16.9.24",
         "@types/react-dom": "^16.9.5",
-        "enzyme": "^3.10.0",
-        "npm": "^6.14.2",
+        "audit-ci": "^2.5.1",
         "react": "^16.9.0",
         "react-copy-to-clipboard": "^5.0.1",
         "react-dom": "^16.9.0",
-        "react-scripts": "3.4.0",
         "react-toastify": "^5.5.0",
         "typescript": "^3.6.2"
     },
     "scripts": {
+        "audit-ci": "audit-ci --config audit-ignore.json",
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
@@ -47,10 +43,17 @@
             "last 1 safari version"
         ]
     },
+    "resolutions": {
+        "acorn": "^7.1.1"
+    },
     "devDependencies": {
+        "@types/enzyme": "^3.10.5",
+        "@types/enzyme-adapter-react-16": "^1.0.6",
+        "@types/jest": "^25.1.4",
         "@types/react-copy-to-clipboard": "^4.3.0",
         "@typescript-eslint/eslint-plugin": "^2.21.0",
         "@typescript-eslint/parser": "^2.21.0",
+        "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "^1.14.0",
         "eslint": "^6.8.0",
         "eslint-config-prettier": "^6.10.0",
@@ -60,6 +63,7 @@
         "node-sass": "^4.12.0",
         "prettier": "^1.19.1",
         "pretty-quick": "^2.0.1",
+        "react-scripts": "^3.4.0",
         "sonarqube-scanner": "^2.5.0"
     },
     "prettier": {

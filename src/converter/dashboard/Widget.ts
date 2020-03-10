@@ -8,6 +8,7 @@ export enum WidgetType {
     GROUP = 'group',
     HOSTMAP = 'hostmap',
     TOPLIST = 'toplist',
+    QUERY_TABLE = 'query_table',
     QUERY_VALUE = 'query_value',
     TIMESERIES = 'timeseries'
 }
@@ -18,6 +19,7 @@ const TERRAFORM_DEFINITION = {
     [WidgetType.GROUP]: 'group_definition',
     [WidgetType.HOSTMAP]: 'hostmap_definition',
     [WidgetType.TOPLIST]: 'toplist_definition',
+    [WidgetType.QUERY_TABLE]: 'query_table_definition',
     [WidgetType.QUERY_VALUE]: 'query_value_definition',
     [WidgetType.TIMESERIES]: 'timeseries_definition'
 };

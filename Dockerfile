@@ -1,6 +1,6 @@
 FROM node:12.16 as node
 
-COPY package.json yarn.lock .eslintrc.yml sonar-project.properties tsconfig.json /root/app/
+COPY package.json yarn.lock .eslintrc.yml sonar-project.properties tsconfig.json audit-ignore.json /root/app/
 
 WORKDIR /root/app
 RUN yarn install
