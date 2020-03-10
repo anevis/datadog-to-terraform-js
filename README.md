@@ -12,7 +12,7 @@ This application converts a given Datadog JSON exported using the Datadog UI int
 
 ## Terraform Datadog provider
 
-Version: **2.1**
+Version: **2.7**
 
 ### Supported Resources
 
