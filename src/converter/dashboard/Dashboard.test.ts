@@ -77,7 +77,7 @@ describe('Construct Dashboard terraform.', () => {
     });
 
     it('Construct Request terraform with notify_list.', () => {
-        const ddJson = '{"title": "My Screenboard",' + ' "layout_type": "free",' + ' "notify_list": ["@my-id"]}';
+        const ddJson = '{"title": "My Screenboard",' + ' "layout_type": "free", "notify_list": ["@my-id"]}';
         const dashboard = new Dashboard(ddJson);
 
         const terraformStr = dashboard.toTerraform();
