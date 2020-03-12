@@ -8,7 +8,6 @@
         "@types/node": "^12.7.4",
         "@types/react": "^16.9.24",
         "@types/react-dom": "^16.9.5",
-        "audit-ci": "^2.5.1",
         "react": "^16.9.0",
         "react-copy-to-clipboard": "^5.0.1",
         "react-dom": "^16.9.0",
@@ -16,7 +15,6 @@
         "typescript": "^3.6.2"
     },
     "scripts": {
-        "audit-ci": "audit-ci --config audit-ignore.json",
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
@@ -63,8 +61,7 @@
         "node-sass": "^4.12.0",
         "prettier": "^1.19.1",
         "pretty-quick": "^2.0.1",
-        "react-scripts": "^3.4.0",
-        "sonarqube-scanner": "^2.5.0"
+        "react-scripts": "^3.4.0"
     },
     "prettier": {
         "printWidth": 120,

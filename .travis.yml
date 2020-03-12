@@ -6,11 +6,8 @@ services:
 jobs:
     include:
         - stage: 'Tests'
-          name: 'Unit Tests'
-          cache: cov
+          name: 'Unit Tests and Analyses to identify vulnerabilities'
           script: ./ci.sh test
-        - script: ./ci.sh analyse
-          name: 'Analyse'
         - stage: Build
           script: ./ci.sh build
           if: branch != master
