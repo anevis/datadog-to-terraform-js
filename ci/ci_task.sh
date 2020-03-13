@@ -20,6 +20,7 @@ fi
 export BUILD_DIR="${WORK_DIR}/build"
 
 echo "Git Branch=${GIT_BRANCH}"
+echo "Git Pull Request=${GIT_PULL_REQUEST}"
 echo "Build Directory=${BUILD_DIR}"
 
 mkdir -p "${BUILD_DIR}"
