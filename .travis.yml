@@ -3,6 +3,11 @@ language: bash
 services:
     - docker
 
+env:
+    - GIT_PULL_REQUEST=$TRAVIS_PULL_REQUEST
+    - GIT_BRANCH=$TRAVIS_BRANCH
+    - WORK_DIR=$TRAVIS_BUILD_DIR
+
 jobs:
     include:
         - stage: 'Tests'

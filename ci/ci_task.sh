@@ -2,25 +2,23 @@
 
 source "$(dirname "$(readlink "$0")")/ci/shared/_docker_helper.sh"
 
-if [[ -n "${TRAVIS_BRANCH:-}" ]];
-then
-    export GIT_BRANCH="${TRAVIS_BRANCH}"
-elif [[ -z "${GIT_BRANCH:-}" ]];
+if [[ -z "${GIT_BRANCH:-}" ]];
 then
     export GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 fi
 
-if [[ -n "${TRAVIS_BUILD_DIR:-}" ]];
+if [[ -z "${GIT_PULL_REQUEST:-}" ]];
 then
-    export WORK_DIR="${TRAVIS_BUILD_DIR}"
-elif [[ -z "${WORK_DIR:-}" ]];
+    export GIT_PULL_REQUEST="false"
+fi
+
+if [[ -z "${WORK_DIR:-}" ]];
 then
     export WORK_DIR=$(pwd)
 fi
 
 export BUILD_DIR="${WORK_DIR}/build"
 
-echo "Travis Branch=${TRAVIS_BRANCH}"
 echo "Git Branch=${GIT_BRANCH}"
 echo "Build Directory=${BUILD_DIR}"
 
