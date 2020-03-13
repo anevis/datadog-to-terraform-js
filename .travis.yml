@@ -8,14 +8,14 @@ jobs:
         - stage: 'Tests'
           name: 'Unit Tests'
           cache: cov
-          script: ./ci.sh test
-        - script: ./ci.sh analyse
+          script: ./travis-ci.sh test
+        - script: ./travis-ci.sh analyse
           name: 'Analyse'
         - stage: Build
-          script: ./ci.sh build
+          script: ./travis-ci.sh build
           if: branch != master
         - stage: Build & Deploy
-          script: ./ci.sh build
+          script: ./travis-ci.sh build
           if: branch = master
           deploy:
               provider: pages
