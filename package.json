@@ -73,7 +73,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "pretty-quick --staged && yarn lint && yarn test-ci --coverage"
+            "pre-commit": "pretty-quick --staged && yarn lint && yarn test-ci"
         }
     }
 }
