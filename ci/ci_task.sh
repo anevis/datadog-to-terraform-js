@@ -17,6 +17,16 @@ then
     export WORK_DIR=$(pwd)
 fi
 
+if [[ -z "${BLOCK_START_PREFIX:-}" ]];
+then
+    export BLOCK_START_PREFIX="Start "
+fi
+
+if [[ -z "${BLOCK_END_PREFIX:-}" ]];
+then
+    export BLOCK_END_PREFIX="End "
+fi
+
 export BUILD_DIR="${WORK_DIR}/build"
 
 echo "Git Branch=${GIT_BRANCH}"

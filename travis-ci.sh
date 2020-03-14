@@ -16,4 +16,11 @@ then
     export WORK_DIR="${TRAVIS_BUILD_DIR}"
 fi
 
+export BLOCK_START_PREFIX="travis_fold:start:"
+export BLOCK_END_PREFIX="travis_fold:end:"
+
+echo "Travis Branch=${TRAVIS_BRANCH}"
+echo "Travis Pull Request=${TRAVIS_PULL_REQUEST}"
+echo "Travis Build Directory=${TRAVIS_BUILD_DIR}"
+
 ./ci.sh "$@"

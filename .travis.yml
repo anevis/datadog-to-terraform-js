@@ -7,7 +7,6 @@ jobs:
     include:
         - stage: 'Tests'
           name: 'Unit Tests'
-          cache: cov
           script: ./travis-ci.sh test
         - script: ./travis-ci.sh analyse
           name: 'Analyse'
