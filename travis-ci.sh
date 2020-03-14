@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${TRAVIS_BRANCH:-}" ]];
-then
-    export GIT_BRANCH="${TRAVIS_BRANCH}"
-fi
-
 if [[ -n "${TRAVIS_PULL_REQUEST:-}" ]];
 then
     export GIT_PULL_REQUEST="${TRAVIS_PULL_REQUEST}"
+fi
+
+if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]];
+then
+    export GIT_BRANCH="${TRAVIS_PULL_REQUEST_BRANCH}"
+elif [[ -n "${TRAVIS_BRANCH:-}" ]];
+then
+    export GIT_BRANCH="${TRAVIS_BRANCH}"
 fi
 
 if [[ -n "${TRAVIS_BUILD_DIR:-}" ]];
