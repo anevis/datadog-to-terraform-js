@@ -8,6 +8,7 @@
         "@types/node": "^12.7.4",
         "@types/react": "^16.9.24",
         "@types/react-dom": "^16.9.5",
+        "acorn": "^7.1.1",
         "audit-ci": "^2.5.1",
         "react": "^16.9.0",
         "react-copy-to-clipboard": "^5.0.1",
@@ -44,9 +45,22 @@
         ]
     },
     "resolutions": {
-        "acorn": "^7.1.1"
+        "acorn": "^7.1.1",
+        "yargs-parser": "^13.1.2"
+    },
+    "jest": {
+        "collectCoverageFrom": [
+            "src/**/*.{js,jsx,ts,tsx}",
+            "!<rootDir>/node_modules/",
+            "!src/**/*.test.{js,jsx,ts,tsx}",
+            "!src/**/index.{js,jsx,ts,tsx}",
+            "!src/serviceWorker.{js,jsx,ts,tsx}",
+            "!src/setupTests.ts",
+            "!src/react-app-env.d.ts"
+        ]
     },
     "devDependencies": {
+        "@babel/helper-call-delegate": "^7.10.1",
         "@types/enzyme": "^3.10.5",
         "@types/enzyme-adapter-react-16": "^1.0.6",
         "@types/jest": "^25.1.4",
