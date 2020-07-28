@@ -45,7 +45,6 @@
         ]
     },
     "resolutions": {
-        "acorn": "^7.1.1",
         "yargs-parser": "^13.1.2"
     },
     "jest": {
