@@ -1,85 +1,71 @@
 import { mount, shallow } from 'enzyme';
 import React from 'react';
-
-import { Converter } from './Converter';
-import { toast } from 'react-toastify';
+import Converter from './Converter';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import Switch from '@material-ui/core/Switch';
+import MuiAlert from '@material-ui/lab/Alert';
+import { Snackbar } from '@material-ui/core';
+const ddJson = '{"title": "My board", "layout_type": "free"}';
 
-const each = require('jest-each').default;
+test('renders without crashing with enzyme', () => {
+    shallow(<Converter />);
+});
 
-describe('Test Converter Component.', () => {
-    it('renders without crashing with enzyme', () => {
-        shallow(<Converter />);
-    });
+test.each([
+    ['JSON', '#dd-json'],
+    ['Terraform', '#dd-terraform'],
+    ['Datadog Logo', '#dd-logo'],
+    ['Terraform Logo', '#tf-logo']
+])('Check that %s component is rendered.', (name: string, field: string) => {
+    const converter = shallow(<Converter />);
+    expect(converter.find(field).length).toBe(1);
+});
 
-    each([
-        ['JSON', '#dd-json'],
-        ['Terraform', '#dd-terraform'],
-        ['Pretty Print Form Control', Switch],
-        ['Copy to Clipboard', CopyToClipboard],
-        ['Datadog Logo', '#dd-logo'],
-        ['Terraform Logo', '#tf-logo']
-    ]).it('Check that %s component is rendered.', (name: string, field: string) => {
-        const converter = mount(<Converter />);
-        expect(converter.find(field).length).toBe(1);
-    });
+test('Check that Pretty Print Form Control component is rendered.', () => {
+    const converter = shallow(<Converter />);
+    expect(converter.find(Switch).length).toBe(1);
+});
 
-    const ddJson = '{"title": "My board", "layout_type": "free"}';
-    it('Check the JSON is converted.', () => {
-        const converter = mount(<Converter />);
-        const jsonField = converter.find('#dd-json');
+test('Check that Copy to Clipboard component is rendered.', () => {
+    const converter = shallow(<Converter />);
+    expect(converter.find(CopyToClipboard).length).toBe(1);
+});
 
-        converter.setState({ prettyPrint: false });
-        jsonField.simulate('change', { target: { value: ddJson } });
-        expect(converter.find('#dd-terraform').prop('children')).toBe(
-            'resource "datadog_dashboard" "dashboard" {title = "My board" layout_type = "free"}'
-        );
-    });
+test('Check the JSON is converted and pretty printed by default.', () => {
+    const converter = mount(<Converter />);
+    const jsonField = converter.find('#dd-json');
 
-    it('Check the JSON error condition.', () => {
-        const converter = mount(<Converter />);
-        const jsonField = converter.find('#dd-json');
-        jsonField.simulate('change', { target: { value: 'invalid JSON' } });
-        expect(converter.find('#dd-json-error').prop('children')).toBe('Unexpected token i in JSON at position 0');
-        expect(converter.find('#dd-terraform').prop('children')).toBeUndefined();
-    });
+    jsonField.simulate('change', { target: { value: ddJson } });
+    expect(converter.find('#dd-terraform').prop('children')).toBe(
+        'resource "datadog_dashboard" "dashboard" {\n  title = "My board" layout_type = "free"\n}\n'
+    );
+});
 
-    it('Check the JSON is converted and pretty printed.', () => {
-        const converter = mount(<Converter />);
-        const jsonField = converter.find('#dd-json');
+test('Check the JSON error condition.', () => {
+    const converter = mount(<Converter />);
+    const jsonField = converter.find('#dd-json');
 
-        jsonField.simulate('change', { target: { value: ddJson } });
-        expect(converter.find('#dd-terraform').prop('children')).toBe(
-            'resource "datadog_dashboard" "dashboard" {\n  title = "My board" layout_type = "free"\n}\n'
-        );
-    });
+    jsonField.simulate('change', { target: { value: 'invalid JSON' } });
+    expect(converter.find(MuiAlert).text()).toBe('Unexpected token i in JSON at position 0');
+    expect(converter.find('#dd-terraform').prop('children')).toBeUndefined();
+});
 
-    it('Check the JSON is converted and pretty printed when pretty print checkbox is clicked.', () => {
-        const converter = mount(<Converter jsonStr={ddJson} />);
-        const prettyPrint = converter.find('input#dd-terraform-pretty-print');
-        converter.setState({ prettyPrint: false });
+test('Check the JSON is converted and not pretty printed when pretty print checkbox is clicked.', () => {
+    const converter = mount(<Converter />);
+    const jsonField = converter.find('#dd-json');
+    const prettyPrint = converter.find('input#dd-terraform-pretty-print');
 
-        prettyPrint.simulate('change', { checked: true });
-        expect(converter.find('#dd-terraform').prop('children')).toBe(
-            'resource "datadog_dashboard" "dashboard" {\n  title = "My board" layout_type = "free"\n}\n'
-        );
-    });
+    prettyPrint.simulate('change', { checked: true });
+    jsonField.simulate('change', { target: { value: ddJson } });
+    expect(converter.find('#dd-terraform').prop('children')).toBe(
+        'resource "datadog_dashboard" "dashboard" {title = "My board" layout_type = "free"}'
+    );
+});
 
-    it('On copy button click.', () => {
-        toast.success = jest.fn();
-        const converter = shallow(<Converter jsonStr={ddJson} />);
-        const copyBtn = converter.find('#btn-copy-terraform');
+test('On copy button click.', () => {
+    const converter = shallow(<Converter />);
+    const copyBtn = converter.find('#btn-copy-terraform');
 
-        copyBtn.simulate('click');
-
-        expect(toast.success).toHaveBeenCalledWith('Terraform successfully copied.', {
-            position: 'top-center',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true
-        });
-    });
+    copyBtn.simulate('click');
+    expect(converter.find(Snackbar).prop('open')).toBeTruthy();
 });

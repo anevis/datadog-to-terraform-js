@@ -1,18 +1,28 @@
 import React from 'react';
-import { Converter } from './Converter';
-import { Header } from './Header';
-import { Footer } from './Footer';
+import Converter from './Converter';
+import Header from './Header';
+import Footer from './Footer';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-import './App.scss';
+const useStyles = makeStyles(() =>
+    createStyles({
+        root: {
+            color: '#333333',
+            font: '400 1rem Roboto, sans-serif'
+        }
+    })
+);
 
-export class App extends React.PureComponent {
-    public render = (): object => {
-        return (
-            <div className="app">
-                <Header />
-                <Converter />
-                <Footer />
-            </div>
-        );
-    };
-}
+const App: React.FC<{}> = () => {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.root}>
+            <Header />
+            <Converter />
+            <Footer />
+        </div>
+    );
+};
+
+export default App;
