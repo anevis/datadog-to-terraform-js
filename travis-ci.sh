@@ -32,6 +32,38 @@ curl -fsSL https://github.com/docker/docker-credential-helpers/releases/download
 export PATH=$PATH:$(pwd)
 chmod + docker-credential-pass
 
+echo "Create docker config"
+config_path=~/.docker
+config_filename=$config_path/config.json
+
+if [ ! -f $config_filename ]
+then
+    if [ ! -d $config_path ]
+    then
+        mkdir -p $config_path
+    fi
+
+    # Create default docker config file if it doesn't exist (never logged in etc.). Empty is fine currently.
+    cat > $config_filename <<EOL
+{
+}
+EOL
+    echo "$config_filename created with defaults"
+else
+    echo "$config_filename already exists"
+fi
+
+# Whether config is new or existing, read into variable for easier file redirection (cat > truncate timing)
+config_json=$(cat $config_filename)
+
+if [ -z "$config_json" ]; then
+    # Empty file will prevent jq from working
+    config_json="{}"
+fi
+
+# Update Docker config to set the credential store. Used sed before but messy / edge cases.
+echo "$config_json" | jq --arg credsStore pass '. + {credsStore: $credsStore}' > $config_filename
+
 echo "Init key for pass"
 gpg --batch --gen-key <<-EOF
 %echo Generating a standard key
@@ -48,7 +80,7 @@ Expire-Date: 0
 EOF
 
 key=$(gpg --no-auto-check-trustdb --list-secret-keys | grep ^sec | cut -d/ -f2 | cut -d" " -f1)
-pass init $key
+pass init "$key"
 
 echo "Leave this password blank (important):"
 pass insert docker-credential-helpers/docker-pass-initialized-check
