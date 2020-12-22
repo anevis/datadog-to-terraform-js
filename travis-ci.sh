@@ -26,4 +26,7 @@ echo "Travis Branch=${TRAVIS_BRANCH}"
 echo "Travis Pull Request=${TRAVIS_PULL_REQUEST}"
 echo "Travis Build Directory=${TRAVIS_BUILD_DIR}"
 
+echo "Docker authentication"
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
 ./ci.sh "$@"
