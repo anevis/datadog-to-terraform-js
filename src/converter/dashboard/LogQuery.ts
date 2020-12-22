@@ -30,26 +30,15 @@ class GroupBy extends BaseComponent {
     }
 }
 
-export class Compute extends TFObject {
-    constructor(ddJson: { [opt: string]: string | number }) {
-        super('compute', ddJson, true);
-    }
+class Compute extends BaseComponent {
+    public readonly computes: TFObject[];
+    public readonly name: string;
 
-    protected propertyNames(): string[] {
-        return [];
-    }
-
-    optionsToTerraform(): string {
-        return super.optionsToTerraform();
-    }
-}
-
-export class MultiCompute extends BaseComponent {
-    public readonly computes: Compute[];
-    constructor(computes: [{ [opt: string]: string | number }]) {
+    constructor(isMulti: boolean, computes: [{ [opt: string]: string | number }]) {
         super({});
 
-        this.computes = computes.map(compute => new Compute(compute));
+        this.name = isMulti ? 'multi_compute' : 'compute';
+        this.computes = computes.map(compute => new TFObject(this.name, compute, !isMulti));
     }
 
     protected propertyNames(): string[] {
@@ -57,17 +46,13 @@ export class MultiCompute extends BaseComponent {
     }
 
     toTerraform(): string {
-        return `multi_compute = [${this.computesToTerraform()}]`;
-    }
-
-    private computesToTerraform(): string {
-        return this.computes.map(compute => `{${compute.optionsToTerraform()}}`).join(', ');
+        return this.computes.map(compute => compute.toTerraform()).join(' ');
     }
 }
 
 export class LogQuery {
     public readonly index: string;
-    public readonly compute: Compute | MultiCompute;
+    public readonly compute: Compute;
 
     public readonly search: TFObject | undefined;
     public readonly groupBy: GroupBy[];
@@ -84,11 +69,11 @@ export class LogQuery {
         this.groupBy = this.initGroupBy();
     }
 
-    private initCompute(): Compute | MultiCompute {
+    private initCompute(): Compute {
         if (this.ddJson.multi_compute) {
-            return new MultiCompute(this.ddJson.multi_compute);
+            return new Compute(true, this.ddJson.multi_compute);
         }
-        return new Compute(this.ddJson.compute);
+        return new Compute(false, [this.ddJson.compute]);
     }
 
     private initSearch(): TFObject | undefined {

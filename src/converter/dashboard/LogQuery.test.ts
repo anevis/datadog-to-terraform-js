@@ -1,4 +1,4 @@
-import { Compute, LogQuery, MultiCompute } from './LogQuery';
+import { LogQuery } from './LogQuery';
 
 describe('Import LogQuery from JSON.', () => {
     it('Check that LogQuery index can be imported from the JSON without an error.', () => {
@@ -25,8 +25,9 @@ describe('Import LogQuery from JSON.', () => {
 
         const logQuery = new LogQuery(ddJson);
 
-        expect((logQuery.compute as Compute).name).toEqual('compute');
-        expect(logQuery.compute.options).toEqual({
+        expect(logQuery.compute.name).toEqual('compute');
+        expect(logQuery.compute.computes.length).toBe(1);
+        expect(logQuery.compute.computes[0].options).toEqual({
             aggregation: 'max',
             facet: '@response_time'
         });
@@ -45,7 +46,8 @@ describe('Import LogQuery from JSON.', () => {
         };
 
         const logQuery = new LogQuery(ddJson);
-        expect((logQuery.compute as MultiCompute).computes.length).toBe(2);
+        expect(logQuery.compute.name).toEqual('multi_compute');
+        expect(logQuery.compute.computes.length).toBe(2);
     });
 
     it('Check that LogQuery search and group_by are empty when not in JSON.', () => {
@@ -219,7 +221,7 @@ describe('Construct LogQuery terraform.', () => {
         const terraformStr = logQuery.toTerraform();
 
         expect(terraformStr).toBe(
-            'log_query {index = "main" multi_compute = [{aggregation = "max" facet = "@response_time"}, {aggregation = "count"}]}'
+            'log_query {index = "main" multi_compute {aggregation = "max" facet = "@response_time"} multi_compute {aggregation = "count"}}'
         );
     });
 });
