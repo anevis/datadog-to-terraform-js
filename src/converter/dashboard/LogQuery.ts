@@ -30,9 +30,44 @@ class GroupBy extends BaseComponent {
     }
 }
 
+export class Compute extends TFObject {
+    constructor(ddJson: { [opt: string]: string | number }) {
+        super('compute', ddJson, true);
+    }
+
+    protected propertyNames(): string[] {
+        return [];
+    }
+
+    optionsToTerraform(): string {
+        return super.optionsToTerraform();
+    }
+}
+
+export class MultiCompute extends BaseComponent {
+    public readonly computes: Compute[];
+    constructor(computes: [{ [opt: string]: string | number }]) {
+        super({});
+
+        this.computes = computes.map(compute => new Compute(compute));
+    }
+
+    protected propertyNames(): string[] {
+        return [];
+    }
+
+    toTerraform(): string {
+        return `multi_compute = [${this.computesToTerraform()}]`;
+    }
+
+    private computesToTerraform(): string {
+        return this.computes.map(compute => `{${compute.optionsToTerraform()}}`).join(', ');
+    }
+}
+
 export class LogQuery {
     public readonly index: string;
-    public readonly compute: TFObject;
+    public readonly compute: Compute | MultiCompute;
 
     public readonly search: TFObject | undefined;
     public readonly groupBy: GroupBy[];
@@ -49,11 +84,11 @@ export class LogQuery {
         this.groupBy = this.initGroupBy();
     }
 
-    private initCompute(): TFObject {
+    private initCompute(): Compute | MultiCompute {
         if (this.ddJson.multi_compute) {
-            throw new Error('multi_compute is currently not supported by the Datadog Terraform provider (v2.7.0).');
+            return new MultiCompute(this.ddJson.multi_compute);
         }
-        return new TFObject('compute', this.ddJson.compute, true);
+        return new Compute(this.ddJson.compute);
     }
 
     private initSearch(): TFObject | undefined {

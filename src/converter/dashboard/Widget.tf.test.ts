@@ -23,7 +23,7 @@ describe('Construct Widget terraform.', () => {
     it('Construct Widget terraform with title having escaped double quotes', () => {
         const ddJson = {
             definition: {
-                title: '@path over \\"service:xplan @path:*\\"',
+                title: '@path over \\"service:xyz @path:*\\"',
                 type: 'query_value'
             }
         };
@@ -32,7 +32,7 @@ describe('Construct Widget terraform.', () => {
         const terraformStr = widget.toTerraform();
 
         expect(terraformStr).toBe(
-            'widget {query_value_definition {title = "@path over \\\\"service:xplan @path:*\\\\""}}'
+            'widget {query_value_definition {title = "@path over \\\\"service:xyz @path:*\\\\""}}'
         );
     });
 

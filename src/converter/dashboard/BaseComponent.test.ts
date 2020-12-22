@@ -63,8 +63,24 @@ describe('Construct Basic Component terraform.', () => {
     });
 
     it('Test BaseComponent formatString with escaped double quotes.', () => {
-        const terraformStr = BaseComponent.formatString('@response_time by @path over \\"service:xplan @path:*\\"');
+        const terraformStr = BaseComponent.formatString('@response_time by @path over \\"service:xyz @path:*\\"');
 
-        expect(terraformStr).toBe('@response_time by @path over \\\\"service:xplan @path:*\\\\"');
+        expect(terraformStr).toBe('@response_time by @path over \\\\"service:xyz @path:*\\\\"');
+    });
+
+    it('Test BaseComponent formatString with escaped new line.', () => {
+        const terraformStr = BaseComponent.formatString(
+            'Can be small disparities between sums for \n\nTotal Users vs Users On Nav.'
+        );
+
+        expect(terraformStr).toBe('Can be small disparities between sums for \\n\\nTotal Users vs Users On Nav.');
+    });
+
+    it('Test BaseComponent formatString with escaped escape character.', () => {
+        const terraformStr = BaseComponent.formatString(
+            'Can be small disparities between sums for \\:Total Users vs Users On Nav.'
+        );
+
+        expect(terraformStr).toBe('Can be small disparities between sums for \\\\:Total Users vs Users On Nav.');
     });
 });

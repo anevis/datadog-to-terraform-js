@@ -28,6 +28,10 @@ export abstract class BaseComponent {
     protected abstract propertyNames(): string[];
 
     public toTerraform(): string {
+        return this.optionsToTerraform();
+    }
+
+    protected optionsToTerraform(): string {
         const optionList: string[] = [];
         for (const opt of Object.keys(this.options)) {
             optionList.push(`${this.optionToTerraform(opt)}`);
@@ -57,15 +61,24 @@ export abstract class BaseComponent {
     }
 
     /**
-     * Format the given string e.g. add escape character before quotes.
+     * Format the given string e.g. add escape character before escape character, quotes and new line.
      *
      * @param value The string value to format.
      * @return The formatted value.
      */
     public static formatString(value: any): string {
-        if (typeof value === 'string' && value.includes('"')) {
-            return value.split('"').join('\\"');
+        let result = value;
+        if (typeof result === 'string') {
+            if (result.includes('\\')) {
+                result = result.split('\\').join('\\\\');
+            }
+            if (result.includes('"') && !result.includes('\\"')) {
+                result = result.split('"').join('\\"');
+            }
+            if (result.includes('\n')) {
+                result = result.split('\n').join('\\n');
+            }
         }
-        return value;
+        return result;
     }
 }

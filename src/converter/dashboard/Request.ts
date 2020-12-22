@@ -111,8 +111,8 @@ export class Request extends BaseComponent {
         return '';
     }
 
-    private optionsToTerraform(): string {
-        const optionsStr = super.toTerraform();
+    protected optionsToTerraform(): string {
+        const optionsStr = super.optionsToTerraform();
         return optionsStr.length > 0 ? ` ${optionsStr}` : '';
     }
 

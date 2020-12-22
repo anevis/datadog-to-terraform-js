@@ -1,4 +1,4 @@
-import { LogQuery } from './LogQuery';
+import { Compute, LogQuery, MultiCompute } from './LogQuery';
 
 describe('Import LogQuery from JSON.', () => {
     it('Check that LogQuery index can be imported from the JSON without an error.', () => {
@@ -25,13 +25,14 @@ describe('Import LogQuery from JSON.', () => {
 
         const logQuery = new LogQuery(ddJson);
 
+        expect((logQuery.compute as Compute).name).toEqual('compute');
         expect(logQuery.compute.options).toEqual({
             aggregation: 'max',
             facet: '@response_time'
         });
     });
 
-    it('Check that LogQuery multi_compute must throw not supported error.', () => {
+    it('Check that LogQuery multi_compute can be imported from the JSON.', () => {
         const ddJson = {
             index: 'main',
             multi_compute: [
@@ -43,9 +44,8 @@ describe('Import LogQuery from JSON.', () => {
             ]
         };
 
-        expect(() => {
-            new LogQuery(ddJson);
-        }).toThrow(Error('multi_compute is currently not supported by the Datadog Terraform provider (v2.7.0).'));
+        const logQuery = new LogQuery(ddJson);
+        expect((logQuery.compute as MultiCompute).computes.length).toBe(2);
     });
 
     it('Check that LogQuery search and group_by are empty when not in JSON.', () => {
@@ -131,9 +131,9 @@ describe('Construct LogQuery terraform.', () => {
                 aggregation: 'max'
             }
         };
-        const request = new LogQuery(ddJson);
+        const logQuery = new LogQuery(ddJson);
 
-        const terraformStr = request.toTerraform();
+        const terraformStr = logQuery.toTerraform();
 
         expect(terraformStr).toBe('log_query {index = "main" compute = {aggregation = "max"}}');
     });
@@ -148,9 +148,9 @@ describe('Construct LogQuery terraform.', () => {
                 query: 'my search query'
             }
         };
-        const request = new LogQuery(ddJson);
+        const logQuery = new LogQuery(ddJson);
 
-        const terraformStr = request.toTerraform();
+        const terraformStr = logQuery.toTerraform();
 
         expect(terraformStr).toBe(
             'log_query {index = "main" compute = {aggregation = "max"} search = {query = "my search query"}}'
@@ -169,9 +169,9 @@ describe('Construct LogQuery terraform.', () => {
                 }
             ]
         };
-        const request = new LogQuery(ddJson);
+        const logQuery = new LogQuery(ddJson);
 
-        const terraformStr = request.toTerraform();
+        const terraformStr = logQuery.toTerraform();
 
         expect(terraformStr).toBe(
             'log_query {index = "main" compute = {aggregation = "max"} group_by {facet = "@path"}}'
@@ -193,12 +193,33 @@ describe('Construct LogQuery terraform.', () => {
                 }
             ]
         };
-        const request = new LogQuery(ddJson);
+        const logQuery = new LogQuery(ddJson);
 
-        const terraformStr = request.toTerraform();
+        const terraformStr = logQuery.toTerraform();
 
         expect(terraformStr).toBe(
             'log_query {index = "main" compute = {aggregation = "max"} group_by {facet = "@path" sort = {aggregation = "max"}}}'
+        );
+    });
+
+    it('Check that LogQuery terraform for multi_compute.', () => {
+        const ddJson = {
+            index: 'main',
+            multi_compute: [
+                {
+                    aggregation: 'max',
+                    facet: '@response_time'
+                },
+                { aggregation: 'count' }
+            ]
+        };
+
+        const logQuery = new LogQuery(ddJson);
+
+        const terraformStr = logQuery.toTerraform();
+
+        expect(terraformStr).toBe(
+            'log_query {index = "main" multi_compute = [{aggregation = "max" facet = "@response_time"}, {aggregation = "count"}]}'
         );
     });
 });

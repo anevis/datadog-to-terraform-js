@@ -12,7 +12,7 @@ This application converts a given Datadog JSON exported using the Datadog UI int
 
 ## Terraform Datadog provider
 
-Version: **2.7**
+Version: **2.18.1**
 
 ### Supported Resources
 
@@ -22,10 +22,10 @@ Version: **2.7**
 
 The following tools and pre-requisites must be available on the machine being used:
 
--   `Node.js` Version > 8.10.0
+-   `Node.js` Version > 10.19.0
 -   `npm` Version > 6.13.4
--   `Yarn` Version > 1.22.0
--   `Docker` Version > 19.03.5
+-   `Yarn` Version > 1.22.5
+-   `Docker` Version > 20.10.1
 -   `Bash` Version > 4.4.20(1)-release
 
 See [package.json](package.json) for all runtime and dev dependencies
@@ -34,7 +34,7 @@ See [package.json](package.json) for all runtime and dev dependencies
 
 ### Log Query multi-compute
 
-Terraform Datadog provider version 2.7.0 dos not seem to support multi_compute in log_query
+N/A
 
 ## Licence
 
