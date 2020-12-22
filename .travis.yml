@@ -2,7 +2,12 @@ language: bash
 
 services:
     - docker
-    - pass
+
+addons:
+    apt:
+        packages:
+            - docker-ce
+            - pass
 
 jobs:
     include:

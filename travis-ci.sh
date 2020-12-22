@@ -26,16 +26,21 @@ echo "Travis Branch=${TRAVIS_BRANCH}"
 echo "Travis Pull Request=${TRAVIS_PULL_REQUEST}"
 echo "Travis Build Directory=${TRAVIS_BUILD_DIR}"
 
-echo "Docker authentication"
-# init key for pass
+echo "${BLOCK_START_PREFIX}DockerAuthentication"
+echo "Download docker-credential-pass"
+curl -fsSL https://github.com/docker/docker-credential-helpers/releases/download/v0.6.3/docker-credential-pass-v0.6.3-amd64.tar.gz | tar xz
+export PATH=$PATH:$(pwd)
+chmod + docker-credential-pass
+
+echo "Init key for pass"
 gpg --batch --gen-key <<-EOF
 %echo Generating a standard key
 Key-Type: DSA
 Key-Length: 1024
 Subkey-Type: ELG-E
 Subkey-Length: 1024
-Name-Real: GHDL [travis-ci]
-Name-Email: ghdl@travis-ci
+Name-Real: Anevis [travis-ci]
+Name-Email: anevis@travis-ci
 Expire-Date: 0
 # Do a commit here, so that we can later print "done" :-)
 %commit
@@ -45,10 +50,12 @@ EOF
 key=$(gpg --no-auto-check-trustdb --list-secret-keys | grep ^sec | cut -d/ -f2 | cut -d" " -f1)
 pass init $key
 
-curl -fsSL https://github.com/docker/docker-credential-helpers/releases/download/v0.6.0/docker-credential-pass-v0.6.0-amd64.tar.gz | tar x
-export PATH=$PATH:$(pwd)
-chmod + docker-credential-pass
+echo "Leave this password blank (important):"
+pass insert docker-credential-helpers/docker-pass-initialized-check
 
+echo "Login to Docker"
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+echo "${BLOCK_END_PREFIX}DockerAuthentication"
 
 ./ci.sh "$@"
