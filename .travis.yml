@@ -2,6 +2,7 @@ language: bash
 
 services:
     - docker
+    - pass
 
 jobs:
     include:
