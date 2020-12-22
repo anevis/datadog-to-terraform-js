@@ -30,9 +30,29 @@ class GroupBy extends BaseComponent {
     }
 }
 
+class Compute extends BaseComponent {
+    public readonly computes: TFObject[];
+    public readonly name: string;
+
+    constructor(isMulti: boolean, computes: [{ [opt: string]: string | number }]) {
+        super({});
+
+        this.name = isMulti ? 'multi_compute' : 'compute';
+        this.computes = computes.map(compute => new TFObject(this.name, compute, !isMulti));
+    }
+
+    protected propertyNames(): string[] {
+        return [];
+    }
+
+    toTerraform(): string {
+        return this.computes.map(compute => compute.toTerraform()).join(' ');
+    }
+}
+
 export class LogQuery {
     public readonly index: string;
-    public readonly compute: TFObject;
+    public readonly compute: Compute;
 
     public readonly search: TFObject | undefined;
     public readonly groupBy: GroupBy[];
@@ -49,11 +69,11 @@ export class LogQuery {
         this.groupBy = this.initGroupBy();
     }
 
-    private initCompute(): TFObject {
+    private initCompute(): Compute {
         if (this.ddJson.multi_compute) {
-            throw new Error('multi_compute is currently not supported by the Datadog Terraform provider (v2.7.0).');
+            return new Compute(true, this.ddJson.multi_compute);
         }
-        return new TFObject('compute', this.ddJson.compute, true);
+        return new Compute(false, [this.ddJson.compute]);
     }
 
     private initSearch(): TFObject | undefined {
