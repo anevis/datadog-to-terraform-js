@@ -65,7 +65,7 @@ const Footer: React.FC<{}> = () => {
                 <Link
                     component="a"
                     underline="none"
-                    href="https://github.com/anevis/datadog-to-terraform-js/blob/master/LICENSE"
+                    href="https://github.com/anevis/datadog-to-terraform-js/blob/main/LICENSE"
                 >
                     Licence
                 </Link>

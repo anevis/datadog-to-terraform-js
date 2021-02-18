@@ -12,10 +12,10 @@ jobs:
           name: 'Analyse'
         - stage: Build
           script: ./travis-ci.sh build
-          if: branch != master
+          if: branch != main
         - stage: Build & Deploy
           script: ./travis-ci.sh build
-          if: branch = master
+          if: branch = main
           deploy:
               provider: pages
               skip_cleanup: true
