@@ -45,7 +45,8 @@
         ]
     },
     "resolutions": {
-        "yargs-parser": "^13.1.2"
+        "yargs-parser": "^13.1.2",
+        "immer": "^8.0.1"
     },
     "jest": {
         "collectCoverageFrom": [
