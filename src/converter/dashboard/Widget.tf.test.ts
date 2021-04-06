@@ -153,4 +153,21 @@ describe('Construct Widget terraform.', () => {
 
         expect(terraformStr).toBe('widget {query_value_definition {yaxis {include_zero = true}}}');
     });
+
+    it('Construct Widget terraform with sort', () => {
+        const ddJson = {
+            definition: {
+                type: 'log_stream',
+                sort: {
+                    column: 'time',
+                    order: 'desc'
+                }
+            }
+        };
+        const widget = new Widget(ddJson);
+
+        const terraformStr = widget.toTerraform();
+
+        expect(terraformStr).toBe('widget {log_stream_definition {sort {column = "time" order = "desc"}}}');
+    });
 });

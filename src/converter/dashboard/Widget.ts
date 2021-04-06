@@ -10,7 +10,8 @@ export enum WidgetType {
     TOPLIST = 'toplist',
     QUERY_TABLE = 'query_table',
     QUERY_VALUE = 'query_value',
-    TIMESERIES = 'timeseries'
+    TIMESERIES = 'timeseries',
+    LOG_STREAM = 'log_stream'
 }
 
 const TERRAFORM_DEFINITION = {
@@ -21,7 +22,8 @@ const TERRAFORM_DEFINITION = {
     [WidgetType.TOPLIST]: 'toplist_definition',
     [WidgetType.QUERY_TABLE]: 'query_table_definition',
     [WidgetType.QUERY_VALUE]: 'query_value_definition',
-    [WidgetType.TIMESERIES]: 'timeseries_definition'
+    [WidgetType.TIMESERIES]: 'timeseries_definition',
+    [WidgetType.LOG_STREAM]: 'log_stream_definition'
 };
 
 class Layout {
@@ -60,6 +62,7 @@ export class Widget extends BaseComponent {
     public readonly isSupported: boolean;
     public readonly widgets: Widget[];
     public readonly time?: Time;
+    public readonly sort?: TFObject;
     public readonly style?: TFObject;
     public readonly yaxis?: TFObject;
 
@@ -77,6 +80,7 @@ export class Widget extends BaseComponent {
         this.requests = this.initRequests();
         this.widgets = this.initWidgets();
         this.time = this.initTime();
+        this.sort = this.initTFObject('sort');
         this.style = this.initTFObject('style');
         this.yaxis = this.initTFObject('yaxis');
 
@@ -125,7 +129,7 @@ export class Widget extends BaseComponent {
     }
 
     protected propertyNames(): string[] {
-        return ['requests', 'style', 'title', 'time', 'type', 'widgets', 'yaxis'];
+        return ['requests', 'sort', 'style', 'title', 'time', 'type', 'widgets', 'yaxis'];
     }
 
     public toTerraform(): string {
@@ -137,6 +141,9 @@ export class Widget extends BaseComponent {
         terraformStr += `${this.requestsToTerraform()}`;
         if (this.time) {
             terraformStr += this.time.toTerraform();
+        }
+        if (this.sort) {
+            terraformStr += this.sort.toTerraform();
         }
         if (this.style) {
             terraformStr += this.style.toTerraform();
