@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-var-requires: "off" */
 import { TFPrettier } from './formatter';
 
 const each = require('jest-each').default;

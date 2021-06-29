@@ -1,8 +1,10 @@
 export abstract class BaseComponent {
     public readonly options: { [opt: string]: string | number | boolean | string[] };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     protected readonly ddJson: { [key: string]: any };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     protected constructor(ddJson: { [key: string]: any }) {
         this.ddJson = ddJson;
 
@@ -66,6 +68,7 @@ export abstract class BaseComponent {
      * @param value The string value to format.
      * @return The formatted value.
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
     public static formatString(value: any): string {
         let result = value;
         if (typeof result === 'string') {

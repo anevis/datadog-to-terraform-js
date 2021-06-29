@@ -37,7 +37,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-const Footer: React.FC<{}> = () => {
+const Footer: React.FC = () => {
     const classes = useStyles();
 
     return (

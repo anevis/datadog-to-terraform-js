@@ -68,7 +68,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-const Converter: React.FC<{}> = () => {
+const Converter: React.FC = () => {
     const [jsonStr, setJsonStr] = useState<string>('');
     const [prettyPrint, setPrettyPrint] = useState<boolean>(true);
     const [terraformStr, setTerraformStr] = useState<string | undefined>();

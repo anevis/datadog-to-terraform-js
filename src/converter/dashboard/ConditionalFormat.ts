@@ -6,12 +6,14 @@ export enum Comparator {
     EQUAL_TO = '='
 }
 
+export type ConditionalFormatInputType = { [opt: string]: string | number };
+
 export class ConditionalFormat {
     public readonly comparator: Comparator;
     public readonly value: number;
     public readonly palette: string;
 
-    public constructor(ddJson: { [opt: string]: string | number }) {
+    public constructor(ddJson: ConditionalFormatInputType) {
         this.comparator = ddJson.comparator as Comparator;
         this.value = ddJson.value as number;
         this.palette = ddJson.palette as string;

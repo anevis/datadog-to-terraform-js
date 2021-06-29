@@ -13,7 +13,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-const Header: React.FC<{}> = () => {
+const Header: React.FC = () => {
     const classes = useStyles();
     return (
         <header>
