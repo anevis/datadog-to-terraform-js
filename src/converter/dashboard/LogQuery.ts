@@ -11,7 +11,7 @@ class GroupBy extends BaseComponent {
     }
 
     private initSortBy(): TFObject | undefined {
-        return this.ddJson.sort ? new TFObject('sort', this.ddJson.sort, true) : undefined;
+        return this.ddJson.sort ? new TFObject('sort_query', this.ddJson.sort, false) : undefined;
     }
 
     protected propertyNames(): string[] {
@@ -37,8 +37,8 @@ class Compute extends BaseComponent {
     constructor(isMulti: boolean, computes: [{ [opt: string]: string | number }]) {
         super({});
 
-        this.name = isMulti ? 'multi_compute' : 'compute';
-        this.computes = computes.map(compute => new TFObject(this.name, compute, !isMulti));
+        this.name = isMulti ? 'multi_compute' : 'compute_query';
+        this.computes = computes.map(compute => new TFObject(this.name, compute, false));
     }
 
     protected propertyNames(): string[] {
@@ -54,7 +54,7 @@ export class LogQuery {
     public readonly index: string;
     public readonly compute: Compute;
 
-    public readonly search: TFObject | undefined;
+    public readonly search: string | undefined;
     public readonly groupBy: GroupBy[];
 
     protected readonly ddJson: { [key: string]: any };
@@ -76,9 +76,9 @@ export class LogQuery {
         return new Compute(false, [this.ddJson.compute]);
     }
 
-    private initSearch(): TFObject | undefined {
+    private initSearch(): string | undefined {
         if (this.ddJson.search) {
-            return new TFObject('search', this.ddJson.search, true);
+            return this.ddJson.search.query;
         }
         return undefined;
     }
@@ -101,7 +101,7 @@ export class LogQuery {
 
     private searchToTerraform(): string {
         if (this.search) {
-            return ' ' + this.search.toTerraform();
+            return ` search_query = "${BaseComponent.formatString(this.search)}"`;
         }
         return '';
     }

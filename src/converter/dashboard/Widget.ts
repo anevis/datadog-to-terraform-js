@@ -40,29 +40,19 @@ class Layout {
     }
 
     public toTerraform(): string {
-        return `layout = {x = ${this.x} y = ${this.y} width = ${this.width} height = ${this.height}}`;
-    }
-}
-
-class Time extends BaseComponent {
-    protected propertyNames(): string[] {
-        return [];
-    }
-
-    toTerraform(): string {
-        return `time = {${super.toTerraform()}}`;
+        return `widget_layout {x = ${this.x} y = ${this.y} width = ${this.width} height = ${this.height}}`;
     }
 }
 
 export class Widget extends BaseComponent {
     public readonly type: WidgetType;
     public readonly title: string;
-    public readonly layout: Layout | undefined;
+    public readonly layout?: Layout;
     public readonly requests: Request[];
     public readonly isSupported: boolean;
     public readonly widgets: Widget[];
-    public readonly time?: Time;
     public readonly sort?: TFObject;
+    public readonly time?: string;
     public readonly style?: TFObject;
     public readonly yaxis?: TFObject;
 
@@ -114,8 +104,8 @@ export class Widget extends BaseComponent {
         return [];
     }
 
-    private initTime(): Time | undefined {
-        return this.widgetJson.definition.time ? new Time(this.widgetJson.definition.time) : undefined;
+    private initTime(): string | undefined {
+        return this.widgetJson.definition.time ? this.widgetJson.definition.time.live_span : undefined;
     }
 
     private initTFObject(name: string): TFObject | undefined {
@@ -140,7 +130,7 @@ export class Widget extends BaseComponent {
         }
         terraformStr += `${this.requestsToTerraform()}`;
         if (this.time) {
-            terraformStr += this.time.toTerraform();
+            terraformStr += ` live_span = "${this.time}"`;
         }
         if (this.sort) {
             terraformStr += this.sort.toTerraform();

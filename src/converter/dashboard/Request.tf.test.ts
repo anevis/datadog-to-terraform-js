@@ -170,6 +170,6 @@ describe('Construct Request terraform.', () => {
 
         const terraformStr = request.toTerraform();
 
-        expect(terraformStr).toBe('request { log_query {index = "main" compute = {aggregation = "max"}}}');
+        expect(terraformStr).toBe('request { log_query {index = "main" compute_query {aggregation = "max"}}}');
     });
 });

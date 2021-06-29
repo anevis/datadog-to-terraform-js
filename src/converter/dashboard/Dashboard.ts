@@ -42,7 +42,7 @@ export class Dashboard extends BaseComponent {
     }
 
     protected propertyNames(): string[] {
-        return ['layout_type', 'notify_list', 'widgets', 'dashboard_id', 'template_variables'];
+        return ['layout_type', 'notify_list', 'widgets', 'dashboard_id', 'template_variables', 'id'];
     }
 
     public toTerraform(): string {
@@ -50,7 +50,7 @@ export class Dashboard extends BaseComponent {
         if (this.notifyList !== undefined) {
             terraformStr += ` notify_list = [${this.notifyList
                 .map((value: string) => {
-                    return `"${value}"`;
+                    return '"' + value + '"';
                 })
                 .join(' ')}]`;
         }
