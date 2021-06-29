@@ -150,7 +150,7 @@ describe('Import Widget JSON.', () => {
         };
         const widget = new Widget(ddJson);
 
-        expect(widget.time?.options).toEqual({ live_span: '1d' });
+        expect(widget.time).toEqual('1d');
     });
 
     it('Check the style does not exist', () => {

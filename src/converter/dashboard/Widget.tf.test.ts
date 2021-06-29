@@ -69,7 +69,7 @@ describe('Construct Widget terraform.', () => {
         const terraformStr = widget.toTerraform();
 
         expect(terraformStr).toBe(
-            'widget {query_value_definition {title = "Test title"} layout = {x = 0 y = 10 width = 20 height = 50}}'
+            'widget {query_value_definition {title = "Test title"} widget_layout {x = 0 y = 10 width = 20 height = 50}}'
         );
     });
 
@@ -119,7 +119,7 @@ describe('Construct Widget terraform.', () => {
 
         const terraformStr = widget.toTerraform();
 
-        expect(terraformStr).toBe('widget {query_value_definition {time = {live_span = "1d"}}}');
+        expect(terraformStr).toBe('widget {query_value_definition { live_span = "1d"}}');
     });
 
     it('Construct Widget terraform with style', () => {
