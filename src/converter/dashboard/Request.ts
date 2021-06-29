@@ -1,13 +1,15 @@
-import { ConditionalFormat } from './ConditionalFormat';
+import { ConditionalFormat, ConditionalFormatInputType } from './ConditionalFormat';
 import { BaseComponent } from './BaseComponent';
 import { TFObject } from './TFObject';
 import { LogQuery } from './LogQuery';
+
+type MetadataInputType = { [opt: string]: string };
 
 class Metadata {
     public readonly expression: string;
     public readonly aliasName: string;
 
-    constructor(ddJson: { [opt: string]: string }) {
+    constructor(ddJson: MetadataInputType) {
         this.expression = ddJson.expression;
         this.aliasName = ddJson.alias_name;
     }
@@ -27,8 +29,10 @@ export class Request extends BaseComponent {
     public readonly style: TFObject | undefined;
     public readonly logQuery: LogQuery | undefined;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private readonly requestDdJson: { [opt: string]: any };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public constructor(ddJson: { [opt: string]: any }) {
         super(ddJson);
 
@@ -51,7 +55,7 @@ export class Request extends BaseComponent {
 
     private initConditionalFormat(): ConditionalFormat[] {
         if (this.requestDdJson.conditional_formats !== undefined) {
-            return this.requestDdJson.conditional_formats.map((cfJson: {}) => {
+            return this.requestDdJson.conditional_formats.map((cfJson: ConditionalFormatInputType) => {
                 return new ConditionalFormat(cfJson);
             });
         }
@@ -60,7 +64,7 @@ export class Request extends BaseComponent {
 
     private initMetadata(): Metadata[] {
         if (this.requestDdJson.metadata !== undefined) {
-            return this.requestDdJson.metadata.map((mdJson: {}) => {
+            return this.requestDdJson.metadata.map((mdJson: MetadataInputType) => {
                 return new Metadata(mdJson);
             });
         }
