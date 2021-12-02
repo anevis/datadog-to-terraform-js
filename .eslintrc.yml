@@ -22,3 +22,4 @@ overrides:
           - '*.test.ts*'
       rules:
           '@typescript-eslint/camelcase': off # Turn off camel case checking for test files
+

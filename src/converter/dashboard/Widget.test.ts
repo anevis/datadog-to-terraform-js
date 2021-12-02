@@ -1,5 +1,6 @@
 import { Widget, WidgetType } from './Widget';
 
+// eslint-disable-next-line  @typescript-eslint/no-var-requires
 const each = require('jest-each').default;
 
 describe('Import Widget JSON.', () => {
