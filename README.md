@@ -1,3 +1,5 @@
+# This project is archived. Please use [datadog_dashboard_json (Resource)](https://registry.terraform.io/providers/DataDog/datadog/latest/docs/resources/dashboard_json) instead.
+
 [![Travis-CI Status](https://travis-ci.com/anevis/datadog-to-terraform-js.svg?branch=main)](https://travis-ci.com/anevis/datadog-to-terraform-js)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=anevis_datadog-to-terraform-js&metric=alert_status)](https://sonarcloud.io/dashboard?id=anevis_datadog-to-terraform-js)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=anevis_datadog-to-terraform-js&metric=coverage)](https://sonarcloud.io/dashboard?id=anevis_datadog-to-terraform-js)
